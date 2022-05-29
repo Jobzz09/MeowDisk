@@ -3,11 +3,12 @@ package repository
 import (
 	"database/sql"
 	"errors"
-	"github.com/Jobzz09/MeowDisk/models"
-	"github.com/go-redis/redis"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/Jobzz09/MeowDisk/models"
+	"github.com/go-redis/redis"
 )
 
 type UserRepository struct {
@@ -66,14 +67,16 @@ func (userRepo UserRepository) Register(data models.UserData) error {
 func (userRepo UserRepository) Login(data models.UserData) error {
 	rows, err := userRepo.db.Query(`SELECT "id","login","password" FROM "user_data"`)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+		return err
 	}
 	var id, login, password string
 	defer rows.Close()
 	for rows.Next() {
 		err := rows.Scan(&id, &login, &password)
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
+			return err
 		}
 		if id == data.Id && login == data.Login && password == data.Password {
 			return nil

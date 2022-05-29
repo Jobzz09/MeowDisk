@@ -3,18 +3,19 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	_ "net/http"
+
 	"github.com/Jobzz09/MeowDisk/user/handlers"
 	"github.com/go-redis/redis"
 	"github.com/labstack/echo"
 	_ "github.com/lib/pq"
-	_ "net/http"
 )
 
 const (
 	host   = "localhost"
 	port   = 5432
 	user   = "postgres"
-	pass   = "12345"
+	pass   = "123123b"
 	dbname = "postgres"
 )
 
