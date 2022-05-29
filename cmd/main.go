@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/box-of-nails/BackendMeowDisk/user/handlers"
+	"github.com/Jobzz09/MeowDisk/user/handlers"
 	"github.com/go-redis/redis"
 	"github.com/labstack/echo"
 	_ "github.com/lib/pq"
