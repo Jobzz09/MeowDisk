@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -78,7 +79,41 @@ func (userH UserHandlers) Logout(ctx echo.Context) error {
 }
 
 func (userH UserHandlers) Upload(ctx echo.Context) error {
-	return nil
+	// Max upload of 10 mb files
+
+	ctx.Request().ParseMultipartForm(10 << 20)
+
+	file, handler, err := ctx.Request().FormFile("file")
+
+	if err != nil {
+		fmt.Println("Error retrieving the file")
+		fmt.Println(err)
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	defer file.Close()
+
+	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
+	fmt.Printf("File Size: %+v\n", handler.Size)
+	fmt.Printf("MIME Header: %+v\n", handler.Header)
+
+	tempFile, err := ioutil.TempFile("/tmp/mewdisk", "upload-*.png")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer tempFile.Close()
+
+	// read all of the contents of our uploaded file into a
+	// byte array
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// write this byte array to our temporary file
+	tempFile.Write(fileBytes)
+	// return that we have successfully uploaded our file!
+	fmt.Println("Successfully Uploaded File")
+	return ctx.JSON(http.StatusOK, nil)
 }
 
 func (userH UserHandlers) InitHandlers(server *echo.Echo) {
